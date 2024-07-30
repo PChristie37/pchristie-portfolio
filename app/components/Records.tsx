@@ -1,26 +1,70 @@
-import {Link} from '@remix-run/react'
-import type {EncodeDataAttributeCallback} from '@sanity/react-loader'
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { Link } from "@remix-run/react";
+import type { EncodeDataAttributeCallback } from "@sanity/react-loader";
+import { useEffect, useRef } from "react";
 
-import {RecordCover} from '~/components/RecordCover'
-import type {RecordStub} from '~/types/record'
+import { RecordCover } from "~/components/RecordCover";
+import type { RecordStub } from "~/types/record";
 
 type RecordsProps = {
-  records: RecordStub[]
-  encodeDataAttribute?: EncodeDataAttributeCallback
-}
+  records: RecordStub[];
+  encodeDataAttribute?: EncodeDataAttributeCallback;
+};
 
 export function Records(props: RecordsProps) {
-  const {records = [], encodeDataAttribute} = props
+  const { records = [], encodeDataAttribute } = props;
+  const container = useRef(null);
+  const tl = useRef<gsap.core.Timeline>();
+
+  useGSAP(
+    () => {
+      const boxes = gsap.utils.toArray(".lsection") as HTMLElement[];
+      tl.current = gsap
+        .timeline()
+        .to(boxes[0], { x: 120, rotation: 360 })
+        .to(boxes[1], { x: -120, rotation: -360 }, "<")
+        // .to(boxes[2], { y: -166 })
+        .reverse();
+    },
+    { scope: container }
+  );
+  // useGSAP(
+  //   () => {
+  //     gsap.from(container.current, {
+  //       autoAlpha: 0,
+  //       duration: 0.5,
+  //       ease: "slow",
+  //       // delay: 1,
+  //       width: 150,
+  //       x: -360
+  //     });
+  //     gsap.from("span, a", {
+  //       autoAlpha: 0,
+  //       duration: 0.5,
+  //       ease: "slow",
+  //       delay: 1
+  //     });
+  //   },
+  //   { scope: container }
+  // );
+  useEffect(() => {
+    if (tl.current) {
+      tl.current.reversed(!tl.current.reversed());
+    }
+  }, [tl]);
 
   return records.length > 0 ? (
-    <ul className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-12 lg:grid-cols-4">
+    <ul
+      ref={container}
+      className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-12 lg:grid-cols-4"
+    >
       {records.map((record, recordI) => (
-        <li key={record._id} className="group relative flex flex-col">
+        <li key={record._id} className="lsection group relative flex flex-col">
           <div
             className="relative overflow-hidden transition-all duration-200 ease-in-out group-hover:scale-105 group-hover:opacity-90"
-            data-sanity={encodeDataAttribute?.([recordI, 'image'])}
+            data-sanity={encodeDataAttribute?.([recordI, "image"])}
           >
-            <div className="absolute z-0 h-48 w-[200%] translate-x-20 translate-y-20 -rotate-45 bg-gradient-to-b from-white to-transparent opacity-25 mix-blend-overlay transition-transform duration-500 ease-in-out group-hover:translate-x-10 group-hover:translate-y-10 group-hover:opacity-75" />
             {record?.slug ? (
               <Link prefetch="intent" to={`/records/${record?.slug}`}>
                 <RecordCover image={record.image} />
@@ -67,8 +111,8 @@ export function Records(props: RecordsProps) {
       </pre>
       <p>
         from the command line to delete existing documents populate the site
-        with content.{' '}
+        with content.{" "}
       </p>
     </div>
-  )
+  );
 }

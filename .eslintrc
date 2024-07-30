@@ -22,10 +22,11 @@
     "prettier/prettier": [
       "error",
       {
-        "semi": false,
+        "semi": true,
         "printWidth": 80,
-        "bracketSpacing": false,
-        "singleQuote": true
+        "bracketSpacing": true,
+        "singleQuote": false,
+        "trailingComma": "never"
       }
     ]
   }

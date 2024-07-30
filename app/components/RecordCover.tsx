@@ -1,26 +1,26 @@
-import type {SanityImageObjectStub} from '@sanity/asset-utils'
-import urlBuilder from '@sanity/image-url'
+import type { SanityImageObjectStub } from "@sanity/asset-utils";
+import urlBuilder from "@sanity/image-url";
 
-import {dataset, projectId} from '~/sanity/projectDetails'
+import { dataset, projectId } from "~/sanity/projectDetails";
 
 type RecordCoverProps = {
-  image?: SanityImageObjectStub & {alt: string}
-}
+  image?: SanityImageObjectStub & { alt: string };
+};
 
 export function RecordCover(props: RecordCoverProps) {
-  const {image} = props
+  const { image } = props;
 
   return (
     <div className="aspect-square bg-gray-50">
       {image ? (
         <img
           className="h-auto w-full object-cover shadow-black transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-cyan-200"
-          src={urlBuilder({projectId, dataset})
+          src={urlBuilder({ projectId, dataset })
             .image(image)
             .height(800)
             .width(800)
-            .fit('max')
-            .auto('format')
+            .fit("fillmax")
+            .auto("format")
             .url()}
           alt={image?.alt ?? ``}
           loading="lazy"
@@ -31,5 +31,5 @@ export function RecordCover(props: RecordCoverProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

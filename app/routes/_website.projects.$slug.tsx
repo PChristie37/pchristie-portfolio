@@ -6,6 +6,7 @@ import type {
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useQuery } from "@sanity/react-loader";
+import { Project } from "~/components/Project";
 
 import { Record } from "~/components/Record";
 import type { loader as layoutLoader } from "~/routes/_website";
@@ -13,7 +14,11 @@ import { OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from "~/routes/resource.og";
 import { client } from "~/sanity/client";
 import { loadQuery } from "~/sanity/loader.server";
 import { loadQueryOptions } from "~/sanity/loadQueryOptions.server";
-import { RECORD_QUERY } from "~/sanity/queries";
+import { PROJECT_QUERY } from "~/sanity/queries";
+import {
+  LandingSectionDocument,
+  landingSectionZ
+} from "~/types/landingSection";
 import { type RecordDocument, recordZ } from "~/types/record";
 
 export const meta: MetaFunction<
@@ -99,15 +104,16 @@ export const action: ActionFunction = async ({ request }) => {
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { options } = await loadQueryOptions(request.headers);
 
-  const query = RECORD_QUERY;
-  const initial = await loadQuery<RecordDocument>(
+  // const query = RECORD_QUERY
+  const query = PROJECT_QUERY;
+  const initial = await loadQuery<LandingSectionDocument>(
     query,
     // $slug.tsx has the params { slug: 'hello-world' }
     params,
     options
   ).then((res) => ({
     ...res,
-    data: res.data ? recordZ.parse(res.data) : null
+    data: res.data ? landingSectionZ.parse(res.data) : null
   }));
 
   if (!initial.data) {
@@ -134,5 +140,5 @@ export default function RecordPage() {
     initial
   });
 
-  return data ? <Record data={data} /> : null;
+  return data ? <Project data={data} /> : null;
 }
