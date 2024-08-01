@@ -3,6 +3,7 @@ import { z } from "zod";
 export const landingSectionZ = z.object({
   _id: z.string(),
   title: z.string().nullable(),
+  url: z.string().nullable(),
   subtitle: z.string().nullable(),
   image: z.any().nullable(),
   slug: z.string().nullable()
@@ -18,6 +19,7 @@ export const landingSectionStubZ = z.object({
   _id: z.string(),
   _type: z.string(),
   title: z.string().nullable(),
+  url: z.string().nullable(),
   subtitle: z.string().nullable(),
   image: z.any().nullable(),
   slug: z.string().nullable()

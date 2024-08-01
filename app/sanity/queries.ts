@@ -18,6 +18,7 @@ export const LANDING_SECTIONS_QUERY = groq`*[_type == "landingSection"][0...12]|
     title,
     subtitle,
     image,
+    url,
     "slug": slug.current,
   } | order(releaseDate desc)`;
 
@@ -25,6 +26,7 @@ export const PROJECT_QUERY = groq`*[_type == "landingSection" && slug.current ==
     ...,
     _id,
     title,
+    url,
     // GROQ can re-shape data in the request!
     "slug": slug.current,
     image,

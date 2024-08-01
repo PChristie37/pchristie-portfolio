@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { createDataAttribute } from "@sanity/visual-editing/remix";
 
 import { LikeDislike } from "~/components/LikeDislike";
@@ -13,7 +14,7 @@ type ProjectProps = {
 };
 
 export function Project({ data }: ProjectProps) {
-  const { _id, title, image } = data;
+  const { _id, title, image, url } = data;
   const imageDataAttribute = createDataAttribute({
     id: _id,
     path: ["image"],
@@ -30,6 +31,11 @@ export function Project({ data }: ProjectProps) {
       </div>
       <div className="flex flex-shrink-0 flex-col gap-4 lg:gap-6 lg:w-2/3">
         <header>{title ? <Title>{title}</Title> : null}</header>
+        {url ? (
+          <Link to={url}>
+            <h2>{url}</h2>
+          </Link>
+        ) : null}
         {/* {content && content?.length > 0 ? (
           <SanityContent value={content} />
         ) : null} */}

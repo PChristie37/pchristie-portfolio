@@ -32,6 +32,11 @@ export const landingSectionType = defineType({
       type: "string"
     }),
     defineField({
+      name: "url",
+      description: "url to the project",
+      type: "string"
+    }),
+    defineField({
       name: "image",
       type: "image",
       options: { hotspot: true },
