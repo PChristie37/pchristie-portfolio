@@ -1,10 +1,17 @@
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { Form, useActionData, useNavigation } from "@remix-run/react";
 import { Resend } from "resend";
+import { ContactForm, validateContactForm } from "./validate";
 
 export async function action({ request }: ActionFunctionArgs) {
   let formData = await request.formData();
   let values = Object.fromEntries(formData);
+  let formValues = { data: values } as ContactForm;
+  let errors = await validateContactForm(formValues);
+  if (errors) {
+    return json({ ok: false, errors }, 400);
+  }
+
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   const { data, error } = await resend.emails.send({
@@ -15,15 +22,16 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (error) {
-    return json({ error }, 400);
+    return json({ error, errors }, 400);
   }
 
-  return json({ success: true });
+  return json({ success: true, errors: null });
 }
 
 export default function ContactPage() {
   const navigation = useNavigation();
   const actionData = useActionData<typeof action>();
+
   return (
     <div className="transition-colors duration-1000 relative isolate dark:bg-black bg-white px-6 py-24 sm:py-32 lg:px-8">
       <svg
@@ -65,7 +73,7 @@ export default function ContactPage() {
             Thanks for reaching out!
           </h2>
           <p className="mt-2 text-lg leading-8 dark:text-gray-400 text-gray-600">
-            I will get respond to your email as soon as possible.
+            I will respond to your email as soon as possible.
           </p>
         </div>
       ) : (
@@ -86,15 +94,24 @@ export default function ContactPage() {
                     htmlFor="firstName"
                     className="block text-sm font-semibold leading-6 dark:text-gray-200 text-gray-900"
                   >
-                    First name
+                    First name{" "}
+                    {actionData?.errors?.firstName && (
+                      <span
+                        id="firstName-error"
+                        className="text-red-500 text-xs"
+                      >
+                        {actionData.errors.firstName}
+                      </span>
+                    )}
                   </label>
+
                   <div className="mt-2.5">
                     <input
                       id="firstName"
                       name="firstName"
                       type="text"
                       autoComplete="given-name"
-                      className="block w-full dark:bg-gray-700 rounded-md border-0 px-3.5 py-2 dark:text-gray-200 text-gray-900 shadow-sm ring-1 ring-inset dark:ring-indigo-500 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className={`block w-full dark:bg-gray-700 rounded-md border-0 px-3.5 py-2 dark:text-gray-200 text-gray-900 shadow-sm ring-1 ring-inset ${actionData?.errors?.firstName ? `dark:ring-red-500 ring-red-500` : `dark:ring-indigo-500 ring-gray-300`} placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                     />
                   </div>
                 </div>
@@ -103,15 +120,24 @@ export default function ContactPage() {
                     htmlFor="lastName"
                     className="block text-sm font-semibold leading-6 dark:text-gray-200 text-gray-900"
                   >
-                    Last name
+                    Last name{" "}
+                    {actionData?.errors?.lastName && (
+                      <span
+                        id="lastName-error"
+                        className="text-red-500 text-xs"
+                      >
+                        {actionData.errors.lastName}
+                      </span>
+                    )}
                   </label>
+
                   <div className="mt-2.5">
                     <input
                       id="lastName"
                       name="lastName"
                       type="text"
                       autoComplete="family-name"
-                      className="block w-full dark:bg-gray-700 rounded-md border-0 px-3.5 py-2  dark:text-gray-200 text-gray-900 shadow-sm ring-1 ring-inset dark:ring-indigo-500 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className={`block w-full dark:bg-gray-700 rounded-md border-0 px-3.5 py-2  dark:text-gray-200 text-gray-900 shadow-sm ring-1 ring-inset ${actionData?.errors?.lastName ? `dark:ring-red-500 ring-red-500` : `dark:ring-indigo-500 ring-gray-300`} placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                     />
                   </div>
                 </div>
@@ -120,14 +146,20 @@ export default function ContactPage() {
                     htmlFor="budget"
                     className="block text-sm font-semibold leading-6 dark:text-gray-200 text-gray-900"
                   >
-                    Budget
+                    Budget{" "}
+                    {actionData?.errors?.budget && (
+                      <span id="budget-error" className="text-red-500 text-xs">
+                        {actionData.errors.budget}
+                      </span>
+                    )}
                   </label>
+
                   <div className="mt-2.5">
                     <input
                       id="budget"
                       name="budget"
                       type="text"
-                      className="block w-full dark:bg-gray-700 rounded-md border-0 px-3.5 py-2 dark:text-gray-200 text-gray-900 shadow-sm ring-1 ring-inset dark:ring-indigo-500 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className={`block w-full dark:bg-gray-700 rounded-md border-0 px-3.5 py-2 dark:text-gray-200 text-gray-900 shadow-sm ring-1 ring-inset ${actionData?.errors?.budget ? `dark:ring-red-500 ring-red-500` : `dark:ring-indigo-500 ring-gray-300`} placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                     />
                   </div>
                 </div>
@@ -136,14 +168,20 @@ export default function ContactPage() {
                     htmlFor="website"
                     className="block text-sm font-semibold leading-6 dark:text-gray-200 text-gray-900"
                   >
-                    Website
+                    Website{" "}
+                    {actionData?.errors?.website && (
+                      <span id="website-error" className="text-red-500 text-xs">
+                        {actionData.errors.website}
+                      </span>
+                    )}
                   </label>
+
                   <div className="mt-2.5">
                     <input
                       id="website"
                       name="website"
-                      type="url"
-                      className="block w-full dark:bg-gray-700 rounded-md border-0 px-3.5 py-2 dark:text-gray-200 text-gray-900 shadow-sm ring-1 ring-inset dark:ring-indigo-500 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      type="text"
+                      className={`block w-full dark:bg-gray-700 rounded-md border-0 px-3.5 py-2 dark:text-gray-200 text-gray-900 shadow-sm ring-1 ring-inset ${actionData?.errors?.website ? `dark:ring-red-500 ring-red-500` : `dark:ring-indigo-500 ring-gray-300`} placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                     />
                   </div>
                 </div>
@@ -152,14 +190,20 @@ export default function ContactPage() {
                     htmlFor="message"
                     className="block text-sm font-semibold leading-6 dark:text-gray-200 text-gray-900"
                   >
-                    Message
+                    Message{" "}
+                    {actionData?.errors?.message && (
+                      <span id="message-error" className="text-red-500 text-xs">
+                        {actionData.errors.message}
+                      </span>
+                    )}
                   </label>
+
                   <div className="mt-2.5">
                     <textarea
                       id="message"
                       name="message"
                       rows={4}
-                      className="block w-full dark:bg-gray-700 rounded-md border-0 px-3.5 py-2 dark:text-gray-200 text-gray-900 shadow-sm ring-1 ring-inset dark:ring-indigo-500 dark:ring-indigo-500 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className={`block w-full dark:bg-gray-700 rounded-md border-0 px-3.5 py-2 dark:text-gray-200 text-gray-900 shadow-sm ring-1 ring-inset ${actionData?.errors?.message ? `dark:ring-red-500 ring-red-500` : `dark:ring-indigo-500 ring-gray-300`} placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                       defaultValue={""}
                     />
                   </div>
@@ -169,14 +213,20 @@ export default function ContactPage() {
                     htmlFor="email"
                     className="block text-sm font-semibold leading-6 dark:text-gray-200 text-gray-900"
                   >
-                    Email
+                    Email{" "}
+                    {actionData?.errors?.email && (
+                      <span id="email-error" className="text-red-500 text-xs">
+                        {actionData.errors.email}
+                      </span>
+                    )}
                   </label>
+
                   <div className="mt-2.5">
                     <input
                       id="email"
                       name="email"
                       type="email"
-                      className="block w-full dark:bg-gray-700 rounded-md border-0 px-3.5 py-2 dark:text-gray-200 text-gray-900 shadow-sm ring-1 ring-inset dark:ring-indigo-500 dark:ring-indigo-500 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className={`block w-full dark:bg-gray-700 rounded-md border-0 px-3.5 py-2 dark:text-gray-200 text-gray-900 shadow-sm ring-1 ring-inset  placeholder:text-gray-400 focus:ring-2 focus:ring-inset ${actionData?.errors?.email ? `dark:ring-red-500 ring-red-500` : `dark:ring-indigo-500 ring-gray-300`} focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                       defaultValue={""}
                     />
                   </div>
