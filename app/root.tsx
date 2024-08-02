@@ -6,13 +6,14 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
+  useLoaderData
 } from "@remix-run/react";
 
 import { themePreferenceCookie } from "~/cookies";
 import { getBodyClassNames } from "~/lib/getBodyClassNames";
 import styles from "~/tailwind.css?url";
 import { themePreference } from "~/types/themePreference";
+import { Analytics } from "@vercel/analytics/react";
 
 export const links: LinksFunction = () => {
   return [
@@ -20,17 +21,17 @@ export const links: LinksFunction = () => {
     {
       rel: "preconnect",
       href: "https://fonts.gstatic.com",
-      crossOrigin: "anonymous",
+      crossOrigin: "anonymous"
     },
     {
       rel: "preconnect",
       href: "https://fonts.googleapis.com",
-      crossOrigin: "anonymous",
+      crossOrigin: "anonymous"
     },
     {
       href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@500;700;800&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap",
-      rel: "stylesheet",
-    },
+      rel: "stylesheet"
+    }
   ];
 };
 
@@ -47,8 +48,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     ENV: {
       VITE_SANITY_PROJECT_ID: import.meta.env.VITE_SANITY_PROJECT_ID!,
       VITE_SANITY_DATASET: import.meta.env.VITE_SANITY_DATASET!,
-      VITE_SANITY_API_VERSION: import.meta.env.VITE_SANITY_API_VERSION!,
-    },
+      VITE_SANITY_API_VERSION: import.meta.env.VITE_SANITY_API_VERSION!
+    }
   });
 };
 
@@ -69,10 +70,11 @@ export default function App() {
         <ScrollRestoration />
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.ENV = ${JSON.stringify(ENV)}`,
+            __html: `window.ENV = ${JSON.stringify(ENV)}`
           }}
         />
         <Scripts />
+        <Analytics />
       </body>
     </html>
   );
