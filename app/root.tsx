@@ -14,7 +14,7 @@ import { getBodyClassNames } from "~/lib/getBodyClassNames";
 import styles from "~/tailwind.css?url";
 import { themePreference } from "~/types/themePreference";
 import { Analytics } from "@vercel/analytics/react";
-
+import { SpeedInsights } from "@vercel/speed-insights/remix";
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: styles },
@@ -74,6 +74,7 @@ export default function App() {
           }}
         />
         <Scripts />
+        <SpeedInsights />
         <Analytics />
       </body>
     </html>
