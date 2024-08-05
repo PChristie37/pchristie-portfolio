@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Await, useLoaderData } from "@remix-run/react";
 import { useQuery } from "@sanity/react-loader";
 
 import { Records } from "~/components/Records";

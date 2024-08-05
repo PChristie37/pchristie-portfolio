@@ -6,8 +6,8 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
 export default function HeroCoder(): JSX.Element {
   const container = useRef<HTMLDivElement>(null);
-  const heroText = useRef<HTMLDivElement>(null);
   const heroImage = useRef<HTMLDivElement>(null);
+  const imageTrigger = useRef<HTMLDivElement>(null);
   gsap.registerPlugin(ScrollTrigger);
 
   useGSAP(
@@ -17,11 +17,11 @@ export default function HeroCoder(): JSX.Element {
           // yes, we can add it to an entire timeline!
           yoyo: false,
           scrollTrigger: {
-            trigger: "fullView",
             pin: true, // pin the trigger element while active
             start: "top top", // when the top of the trigger hits the top of the viewport
-            end: "+=250", // end after scrolling 500px beyond the start
+            end: "+=1200", // end after scrolling 500px beyond the start
             scrub: 1, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
+            // markers: true,
             snap: {
               snapTo: "labels", // snap to the closest label in the timeline
               duration: { min: 0.2, max: 3 }, // the snap animation should be at least 0.2 seconds, but no more than 3 seconds (determined by velocity)
@@ -31,23 +31,9 @@ export default function HeroCoder(): JSX.Element {
           }
         })
         .fromTo(
-          heroText.current,
-          {
-            //   delay: 0.6,
-            opacity: 0,
-            clipPath: "polygon(0% 0%,100% 0%,100% 100%, 0% 100%)"
-            //   duration: 0.8
-          },
-          {
-            opacity: 1
-          }
-        )
-        .fromTo(
           heroImage.current,
           {
-            opacity: 0,
-            clipPath: "polygon(0% 0%,100% 0%,100% 100%, 0% 100%)"
-            //   duration: 0.8
+            opacity: 0
           },
           {
             opacity: 1
@@ -56,6 +42,7 @@ export default function HeroCoder(): JSX.Element {
     },
     { scope: container }
   );
+
   return (
     <div
       ref={container}
@@ -79,7 +66,7 @@ export default function HeroCoder(): JSX.Element {
             <h1 className="mt-24 text-4xl font-bold tracking-tight dark:text-gray-100 text-gray-900 sm:mt-10 sm:text-6xl">
               Skills and experience to enrich your online business
             </h1>
-            <div className="fullView"></div>
+            <div ref={imageTrigger}></div>
             <p className="mt-6 text-lg leading-8 dark:text-gray-400 text-gray-600">
               As a full stack developer, I have the expertise to enhance your
               online business. I can handle both the front-end and back-end
@@ -104,6 +91,7 @@ export default function HeroCoder(): JSX.Element {
         </div>
         <div
           ref={heroImage}
+          // id="triggered-element"
           className="relative opacity-0 lg:col-span-5 lg:-mr-8 xl:absolute xl:inset-0 xl:left-1/2 xl:mr-0"
         >
           <img
