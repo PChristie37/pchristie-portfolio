@@ -1,20 +1,20 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Await, useLoaderData } from "@remix-run/react";
+import { defer, Await, useLoaderData } from "@remix-run/react";
 import { useQuery } from "@sanity/react-loader";
 
-import { Records } from "~/components/Records";
 import type { loader as layoutLoader } from "~/routes/_website";
 import { loadQuery } from "~/sanity/loader.server";
 import { loadQueryOptions } from "~/sanity/loadQueryOptions.server";
-import { RECORDS_QUERY, LANDING_SECTIONS_QUERY } from "~/sanity/queries";
-import type { RecordStub } from "~/types/record";
+import { LANDING_SECTIONS_QUERY } from "~/sanity/queries";
+
 import {
   landingSectionsStubsZ,
   type LandingSectionStub
 } from "~/types/landingSection";
-import { recordStubsZ } from "~/types/record";
 import { LandingSections } from "~/components/LandingSections";
 import HeroCoder from "~/components/HeroCoder";
+import { Loading } from "~/components/Loading";
+import { Suspense } from "react";
 
 export const meta: MetaFunction<
   typeof loader,
@@ -33,19 +33,11 @@ export const meta: MetaFunction<
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { options } = await loadQueryOptions(request.headers);
-  const query = RECORDS_QUERY;
-  const queryLandingSections = LANDING_SECTIONS_QUERY;
   const params = {};
-  const initial = await loadQuery<RecordStub[]>(query, params, options).then(
-    (res) => ({
-      ...res,
-      data: res.data ? recordStubsZ.parse(res.data) : null
-    })
-  );
 
-  const initialLandingSections = await loadQuery<LandingSectionStub[]>(
-    queryLandingSections,
-    params,
+  const initial = await loadQuery<LandingSectionStub[]>(
+    LANDING_SECTIONS_QUERY,
+    {},
     options
   ).then((res) => ({
     ...res,
@@ -56,27 +48,30 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     throw new Response("Not found", { status: 404 });
   }
 
-  if (!initialLandingSections.data) {
-    throw new Response("Not found", { status: 404 });
-  }
-
-  return { initial, initialLandingSections, query, params };
+  return defer({
+    initial,
+    params
+  });
+  // return { initial, initialLandingSections, query, params };
 };
 
 export default function Index() {
-  const { initial, initialLandingSections, query, params } =
-    useLoaderData<typeof loader>();
-  const { data } = useQuery<typeof initial.data>(query, params, {
+  const { initial, params } = useLoaderData<typeof loader>();
+  const data = useQuery<typeof initial>(LANDING_SECTIONS_QUERY, params, {
     // There's a TS issue with how initial comes over the wire
     // @ts-expect-error
     initial
   });
+  console.log(initial);
+  console.log(data);
   return data ? (
     <div>
       <HeroCoder />
-      {initialLandingSections.data && (
-        <LandingSections landingSections={initialLandingSections.data} />
-      )}
+      <Suspense fallback={<Loading />}>
+        <Await resolve={initial} errorElement={<h1>ERROR!</h1>}>
+          {(projects) => <LandingSections landingSections={projects.data} />}
+        </Await>
+      </Suspense>
     </div>
   ) : null;
 }

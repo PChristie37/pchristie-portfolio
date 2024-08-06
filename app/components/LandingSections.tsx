@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap/dist/gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 type LandingSectionsProps = {
-  landingSections: LandingSectionStub[];
+  landingSections: LandingSectionStub[] | null;
   encodeDataAttribute?: EncodeDataAttributeCallback;
 };
 
@@ -54,7 +54,7 @@ export function LandingSections(props: LandingSectionsProps) {
     { scope: container }
   );
 
-  return landingSections.length > 0 ? (
+  return landingSections && landingSections.length > 0 ? (
     <div ref={container}>
       <h1 className="projectView pb-4 xl:col-span-6 mt-24 text-4xl font-bold tracking-tight dark:text-gray-100 text-gray-900 sm:mt-10 sm:text-6xl">
         Projects
