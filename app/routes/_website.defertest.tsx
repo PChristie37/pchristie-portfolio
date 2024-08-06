@@ -5,6 +5,7 @@ import {
   useLoaderData,
   ClientLoaderFunctionArgs
 } from "@remix-run/react";
+import { useQuery } from "@sanity/react-loader";
 import { Suspense } from "react";
 import { Loading } from "~/components/Loading";
 import type { loader as layoutLoader } from "~/routes/_website";
@@ -57,7 +58,17 @@ clientLoader.hydrate = true;
 
 export default function Index() {
   const query = useLoaderData<typeof loader>();
-  return (
+  const { data } = useQuery<typeof query.data>(
+    LANDING_SECTIONS_QUERY,
+    {},
+    {
+      // There's a TS issue with how initial comes over the wire
+      // @ts-expect-error
+      query
+    }
+  );
+
+  return data ? (
     <Suspense fallback={<Loading />}>
       <Await resolve={query.data} errorElement={<h1>ERROR!</h1>}>
         {(projects) => (
@@ -71,5 +82,5 @@ export default function Index() {
         )}
       </Await>
     </Suspense>
-  );
+  ) : null;
 }
