@@ -58,17 +58,8 @@ clientLoader.hydrate = true;
 
 export default function Index() {
   const query = useLoaderData<typeof loader>();
-  const { data } = useQuery<typeof query.data>(
-    LANDING_SECTIONS_QUERY,
-    {},
-    {
-      // There's a TS issue with how initial comes over the wire
-      // @ts-expect-error
-      query
-    }
-  );
-
-  return data ? (
+  console.log({ query });
+  return (
     <Suspense fallback={<Loading />}>
       <Await resolve={query.data} errorElement={<h1>ERROR!</h1>}>
         {(projects) => (
@@ -82,5 +73,5 @@ export default function Index() {
         )}
       </Await>
     </Suspense>
-  ) : null;
+  );
 }
