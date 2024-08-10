@@ -48,7 +48,7 @@ export default function HeroCoder(): JSX.Element {
       ref={container}
       className="transition-colors duration-1000 relative bg-white dark:bg-black"
     >
-      <div className="mx-auto max-w-7xl lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-8">
+      <div className="mx-auto max-w-7xl lg:grid lg:grid-cols-12 lg:gap-x-8">
         <div className="px-6 pb-24 pt-10 sm:pb-32 lg:col-span-7 lg:px-0 lg:pb-18 lg:pt-18 xl:col-span-6">
           <div className="mx-auto max-w-2xl pt-1 lg:mx-0">
             <div className="hidden sm:mt-16 sm:flex lg:mt-8">

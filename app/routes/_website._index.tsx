@@ -62,16 +62,15 @@ export default function Index() {
     // @ts-expect-error
     initial
   });
-  console.log(initial);
-  console.log(data);
+
   return data ? (
     <div>
-      <HeroCoder />
       <Suspense fallback={<Loading />}>
         <Await resolve={initial} errorElement={<h1>ERROR!</h1>}>
           {(projects) => <LandingSections landingSections={projects.data} />}
         </Await>
       </Suspense>
+      <HeroCoder />
     </div>
   ) : null;
 }
