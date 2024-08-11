@@ -36,9 +36,6 @@ export function Project({ data }: ProjectProps) {
             <h2>{url}</h2>
           </Link>
         ) : null}
-        {/* {content && content?.length > 0 ? (
-          <SanityContent value={content} />
-        ) : null} */}
       </div>
     </article>
   );

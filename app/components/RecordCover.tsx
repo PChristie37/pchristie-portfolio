@@ -11,14 +11,14 @@ export function RecordCover(props: RecordCoverProps) {
   const { image } = props;
 
   return (
-    <div className="aspect-square bg-gray-50">
+    <div className="aspect-auto dark:bg-indigo-800 bg-indigo-400">
       {image ? (
         <img
-          className="h-auto w-full object-cover shadow-black transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-cyan-200"
+          className="h-auto scale-95 rounded-md w-full object-cover shadow-black transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-cyan-200"
           src={urlBuilder({ projectId, dataset })
             .image(image)
-            .height(800)
-            .width(800)
+            // .height(400)
+            // .width(300)
             .fit("fillmax")
             .auto("format")
             .url()}

@@ -97,7 +97,7 @@ export default function HeroCoder(): JSX.Element {
           <img
             alt=""
             src="https://images.unsplash.com/photo-1498758536662-35b82cd15e29?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2102&q=80"
-            className="aspect-[3/2] w-full bg-gray-50 object-cover lg:absolute lg:inset-0 lg:aspect-auto lg:h-full"
+            className="aspect-[3/2] w-full rounded-md bg-gray-50 object-cover lg:absolute lg:inset-0 lg:aspect-auto lg:h-full"
           />
         </div>
       </div>

@@ -58,7 +58,16 @@ export default function Website() {
     <>
       <Header home={home} theme={theme} />
       <div className="container mx-auto p-4 lg:p-12 grid grid-cols-1 gap-4 lg:gap-12">
-        {home?.title && pathname === "/" ? <Title>{home?.title}</Title> : null}
+        {home?.title && pathname === "/" ? (
+          <div className="flex justify-start align-middle">
+            <Title>{home?.title}</Title>
+            <img
+              alt="Peter Christie Headshot"
+              src="https://media.licdn.com/dms/image/C5103AQHKMkV-njvIDQ/profile-displayphoto-shrink_800_800/0/1517487982122?e=1729123200&v=beta&t=FeEsFp_jFkXTflxzczflccF0hXvDZpENBipvLlLdsgA"
+              className="lg:h-48 lg:w-48 md:h-36 md:w-36 h-20 w-20 rounded-full border-2 border-indigo-500"
+            />
+          </div>
+        ) : null}
         <Outlet />
       </div>
       <Footer home={home} />

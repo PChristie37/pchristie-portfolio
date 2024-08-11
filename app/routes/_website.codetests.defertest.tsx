@@ -1,11 +1,10 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/node";
 import {
   defer,
   Await,
   useLoaderData,
   ClientLoaderFunctionArgs
 } from "@remix-run/react";
-import { useQuery } from "@sanity/react-loader";
 import { Suspense } from "react";
 import { Loading } from "~/components/Loading";
 import type { loader as layoutLoader } from "~/routes/_website";

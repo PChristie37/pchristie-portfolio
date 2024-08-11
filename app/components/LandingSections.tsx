@@ -55,13 +55,13 @@ export function LandingSections(props: LandingSectionsProps) {
   );
 
   return landingSections && landingSections.length > 0 ? (
-    <div ref={container}>
+    <div className="pb-8" ref={container}>
       <h1 className="projectView pb-4 xl:col-span-6 mt-24 text-4xl font-bold tracking-tight sm:mt-10 sm:text-6xl bg-gradient-to-r dark:from-indigo-300  dark:to-indigo-900 from-indigo-500  to-indigo-900 inline-block text-transparent bg-clip-text">
         Projects
       </h1>
       <ul
         ref={projects}
-        className="grid grid-cols-2 mt-8 gap-4 md:grid-cols-2 lg:gap-12 lg:grid-cols-3"
+        className="grid mt-8 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:gap-12 lg:grid-cols-3"
       >
         {landingSections.map((lSection, lSectionI) => (
           <li
@@ -69,7 +69,7 @@ export function LandingSections(props: LandingSectionsProps) {
             className="lsection group relative flex flex-col"
           >
             <div
-              className="relative overflow-hidden transition-all duration-200 ease-in-out group-hover:scale-105 group-hover:opacity-90"
+              className="relative overflow-hidden rounded-md transition-all duration-200 ease-in-out group-hover:scale-105 group-hover:opacity-90"
               data-sanity={encodeDataAttribute?.([lSectionI, "image"])}
             >
               {lSection?.slug ? (
