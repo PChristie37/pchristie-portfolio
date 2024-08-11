@@ -59,7 +59,7 @@ export default function Website() {
       <Header home={home} theme={theme} />
       <div className="container mx-auto p-4 lg:p-12 grid grid-cols-1 gap-4 lg:gap-12">
         {home?.title && pathname === "/" ? (
-          <div className="flex justify-start align-middle">
+          <div className="flex justify-between align-middle">
             <Title>{home?.title}</Title>
             <img
               alt="Peter Christie Headshot"

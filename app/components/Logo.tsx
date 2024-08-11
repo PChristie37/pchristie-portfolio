@@ -12,7 +12,7 @@ export function Logo(props: LogoProps) {
   }
 
   return (
-    <p className="text-lg font-bold tracking-tighter text-indigo-900 dark:text-indigo-700 lg:text-2xl">
+    <p className="text-lg font-bold tracking-tighter text-indigo-900 dark:text-indigo-600 lg:text-2xl">
       <Link to="/">{siteTitle ?? `Sanity Remix`}</Link>
     </p>
   );
